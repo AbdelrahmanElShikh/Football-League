@@ -12,10 +12,10 @@ import static com.abdelrahman.footballleague.api.Status.SUCCESS;
 /**
  * @author Abdel-Rahman El-Shikh on 16-Nov-19.
  */
-public abstract class RequestHanlder<T> {
+public abstract class RequestHandler<T> {
     private MutableLiveData<ApiResponse<T>> apiResponseMutableLiveData;
 
-    protected RequestHanlder() {
+    protected RequestHandler() {
         apiResponseMutableLiveData = new MutableLiveData<>();
     }
 
