@@ -7,6 +7,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Path;
 
 /**
@@ -15,6 +16,7 @@ import retrofit2.http.Path;
 public interface ApiService {
 
     //Get Premier League Teams
+    @Headers("X-Auth-Token: " + "ae449e21e9524d928dadbdc85df4022c")
     @GET("competitions/2021/teams")
     Call<PremierLeague> getPremierLeagueTeams();
 

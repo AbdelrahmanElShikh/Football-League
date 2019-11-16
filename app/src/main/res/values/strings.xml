@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Football League</string>
+    <!--Splash Screen-->
+    <string name="cd_splash">Premier League Logo</string>
 </resources>

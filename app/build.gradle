@@ -50,4 +50,7 @@ dependencies {
     def okHttpVersion = "3.11.0"
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+    //Room
+    implementation "android.arch.persistence.room:runtime:2.2.1"
+    annotationProcessor "android.arch.persistence.room:compiler:2.2.1"
 }

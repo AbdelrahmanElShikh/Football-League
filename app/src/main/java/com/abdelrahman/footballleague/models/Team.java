@@ -1,5 +1,9 @@
 package com.abdelrahman.footballleague.models;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -8,10 +12,13 @@ import java.util.List;
 /**
  * @author Abdel-Rahman El-Shikh on 16-Nov-19.
  */
+@Entity(tableName = "teams")
 public class Team {
 
     @SerializedName("id")
     @Expose
+    @PrimaryKey
+    @NonNull
     private Integer id;
     @SerializedName("name")
     @Expose
@@ -49,9 +56,14 @@ public class Team {
     @SerializedName("squad")
     @Expose
     private List<Squad> squad = null;
-    @SerializedName("lastUpdated")
-    @Expose
-    private String lastUpdated;
+
+
+    public Team(@NonNull Integer id, String name, String website, String venue) {
+        this.id = id;
+        this.name = name;
+        this.website = website;
+        this.venue = venue;
+    }
 
     public Integer getId() {
         return id;
@@ -157,11 +169,4 @@ public class Team {
         this.squad = squad;
     }
 
-    public String getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(String lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
 }

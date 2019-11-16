@@ -70,7 +70,6 @@ public class RetrofitBuilder {
 
     private static Interceptor networkInterceptor() {
         return chain -> {
-            String apiKey = "ae449e21e9524d928dadbdc85df4022c=";
             Log.d(TAG, "network interceptor: called.");
 
             Response response = chain.proceed(chain.request());
@@ -87,8 +86,6 @@ public class RetrofitBuilder {
                     .removeHeader(HEADER_CACHE_CONTROL)
                     //applying our own cache control
                     .header(HEADER_CACHE_CONTROL, cacheControl.toString())
-                    //adding our api key
-                    .addHeader("X-Auth-Token", apiKey)
                     .build();
         };
     }
