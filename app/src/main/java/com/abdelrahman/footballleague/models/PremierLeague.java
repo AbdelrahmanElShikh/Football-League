@@ -9,6 +9,7 @@ import java.util.List;
  * @author Abdel-Rahman El-Shikh on 16-Nov-19.
  */
 public class PremierLeague {
+
     @SerializedName("count")
     @Expose
     private Integer count;
@@ -24,7 +25,6 @@ public class PremierLeague {
     public void setCount(Integer count) {
         this.count = count;
     }
-
 
     public List<Team> getTeams() {
         return teams;

@@ -4,6 +4,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.paging.PagedList;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.abdelrahman.footballleague.databinding.TeamItemBinding;
@@ -14,13 +17,30 @@ import java.util.List;
 /**
  * @author Abdel-Rahman El-Shikh on 15-Nov-19.
  */
-public class TeamAdapter extends RecyclerView.Adapter<TeamAdapter.ViewHolder> {
+public class TeamAdapter extends PagedListAdapter<Team, TeamAdapter.ViewHolder> {
     private List<Team> teamList;
     private OnTeamClick listener;
 
     public TeamAdapter(OnTeamClick listener) {
+        super(DIFF_CALLBACK);
         this.listener = listener;
     }
+
+    public static DiffUtil.ItemCallback<Team> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<Team>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull Team oldTeam,
+                                               @NonNull Team newTeam) {
+                    return oldTeam.getId() == newTeam.getId();
+                }
+
+                @Override
+                public boolean areContentsTheSame(@NonNull Team oldTeam,
+                                                  @NonNull Team newTeam) {
+                    return oldTeam.equals(newTeam);
+                }
+            };
+
     public void setTeams(List<Team> teamList){
         this.teamList = teamList;
         notifyDataSetChanged();

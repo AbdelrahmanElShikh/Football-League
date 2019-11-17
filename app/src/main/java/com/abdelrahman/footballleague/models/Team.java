@@ -1,6 +1,7 @@
 package com.abdelrahman.footballleague.models;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -8,6 +9,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Abdel-Rahman El-Shikh on 16-Nov-19.
@@ -15,17 +17,28 @@ import java.util.List;
 @Entity(tableName = "teams")
 public class Team {
 
-    @SerializedName("id")
-    @Expose
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
     @NonNull
     private Integer id;
+    @SerializedName("id")
+    @Expose
+    private Integer teamId;
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("shortName")
     @Expose
     private String shortName;
+
+    public Integer getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(Integer teamId) {
+        this.teamId = teamId;
+    }
+
     @SerializedName("tla")
     @Expose
     private String tla;
@@ -43,7 +56,7 @@ public class Team {
     private String website;
     @SerializedName("email")
     @Expose
-    private Object email;
+    private String email;
     @SerializedName("founded")
     @Expose
     private Integer founded;
@@ -53,9 +66,9 @@ public class Team {
     @SerializedName("venue")
     @Expose
     private String venue;
-    @SerializedName("squad")
-    @Expose
-    private List<Squad> squad = null;
+//    @SerializedName("squad")
+//    @Expose
+//    private List<Squad> squad = null;
 
 
     public Team(@NonNull Integer id, String name, String website, String venue) {
@@ -129,11 +142,11 @@ public class Team {
         this.website = website;
     }
 
-    public Object getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(Object email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -161,12 +174,21 @@ public class Team {
         this.venue = venue;
     }
 
-    public List<Squad> getSquad() {
-        return squad;
-    }
+//    public List<Squad> getSquad() {
+//        return squad;
+//    }
+//
+//    public void setSquad(List<Squad> squad) {
+//        this.squad = squad;
+//    }
 
-    public void setSquad(List<Squad> squad) {
-        this.squad = squad;
-    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Team)) return false;
+        Team team = (Team) o;
+        return teamId.equals(team.teamId) &&
+                id.equals(team.id);
+    }
 }

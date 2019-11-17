@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.abdelrahman.footballleague.MyApplication;
 import com.abdelrahman.footballleague.R;
 import com.abdelrahman.footballleague.adapters.TeamAdapter;
 import com.abdelrahman.footballleague.databinding.PremierLeagueFragmentBinding;
@@ -26,35 +27,54 @@ public class TeamsFragment extends Fragment implements TeamAdapter.OnTeamClick {
     private PremierLeagueFragmentBinding binding;
     private TeamsViewModel mViewModel;
     private TeamAdapter mAdapter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.premier_league_fragment,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.premier_league_fragment, container, false);
         mViewModel = ViewModelProviders.of(this).get(TeamsViewModel.class);
         mViewModel.init();
         binding.recyclerViewTeams.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new TeamAdapter(this);
         binding.recyclerViewTeams.setAdapter(mAdapter);
-        getTeams();
+        if(MyApplication.hasNetwork())
+        getTeamsFromApi();
+        else getTeamsFromDb();
         return binding.getRoot();
     }
 
-    private void getTeams() {
-        mViewModel.getPremierLeagueTeams().observe(getViewLifecycleOwner(),response -> {
-            switch (response.getStatus()){
-                case SUCCESS:
-                    mAdapter.setTeams(response.getData().getTeams());
-                    break;
-                case ERROR:
-                    Toast.makeText(getActivity(), response.getApiError().getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "getTeams: Error "+response.getApiError().getMessage());
-                    break;
-                case Failure:
-                    Toast.makeText(getActivity(), response.getApiException().getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "getTeams: Failure"+response.getApiException().getLocalizedMessage() );
-            }
-            binding.progressBar.setVisibility(View.GONE);
-        });
+    private void getTeamsFromDb() {
+        Log.i(TAG, "getTeams: From Local Database");
+        mViewModel.getTeamsLiveData().observe(getViewLifecycleOwner(), teams -> {
+                   // mAdapter.setTeams(teams);
+                    binding.progressBar.setVisibility(View.GONE);
+                }
+        );
+    }
+
+    private void getTeamsFromApi() {
+            Log.i(TAG, "getTeams: Updated");
+            mViewModel.getPremierLeagueTeams().observe(getViewLifecycleOwner(), response -> {
+                switch (response.getStatus()) {
+                    case SUCCESS:
+                        mViewModel.deleteAndInsertNewTeams(response.getData().getTeams());
+                        getTeamsFromDb();
+                        break;
+                    case ERROR:
+                        Toast.makeText(getActivity(), response.getApiError().getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "getTeams: Error " + response.getApiError().getMessage());
+                        break;
+                    case Failure:
+                        Toast.makeText(getActivity(), "Server Error , Data from database", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "getTeams: Failure" + response.getApiException().getLocalizedMessage());
+                }
+                binding.progressBar.setVisibility(View.GONE);
+            });
+
+
+
+
+
     }
 
     @Override
