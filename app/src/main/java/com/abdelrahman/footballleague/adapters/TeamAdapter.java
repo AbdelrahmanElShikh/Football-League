@@ -1,10 +1,10 @@
 package com.abdelrahman.footballleague.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.paging.PagedList;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,13 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.abdelrahman.footballleague.databinding.TeamItemBinding;
 import com.abdelrahman.footballleague.models.Team;
 
-import java.util.List;
-
 /**
  * @author Abdel-Rahman El-Shikh on 15-Nov-19.
  */
 public class TeamAdapter extends PagedListAdapter<Team, TeamAdapter.ViewHolder> {
-    private List<Team> teamList;
+    private static final String TAG = "TeamAdapter";
     private OnTeamClick listener;
 
     public TeamAdapter(OnTeamClick listener) {
@@ -26,25 +24,20 @@ public class TeamAdapter extends PagedListAdapter<Team, TeamAdapter.ViewHolder> 
         this.listener = listener;
     }
 
-    public static DiffUtil.ItemCallback<Team> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<Team>() {
-                @Override
-                public boolean areItemsTheSame(@NonNull Team oldTeam,
-                                               @NonNull Team newTeam) {
-                    return oldTeam.getId() == newTeam.getId();
-                }
+    private static DiffUtil.ItemCallback<Team> DIFF_CALLBACK =new DiffUtil.ItemCallback<Team>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Team oldItem, @NonNull Team newItem) {
+            Log.e(TAG, "areItemsTheSame: " );
+            return oldItem.getDbId() == newItem.getDbId();
+        }
 
-                @Override
-                public boolean areContentsTheSame(@NonNull Team oldTeam,
-                                                  @NonNull Team newTeam) {
-                    return oldTeam.equals(newTeam);
-                }
-            };
+        @Override
+        public boolean areContentsTheSame(@NonNull Team oldItem, @NonNull Team newItem) {
+            Log.e(TAG, "areContentsTheSame: " );
+            return oldItem.equals(newItem);
+        }
+    };
 
-    public void setTeams(List<Team> teamList){
-        this.teamList = teamList;
-        notifyDataSetChanged();
-    }
 
     @NonNull
     @Override
@@ -56,17 +49,18 @@ public class TeamAdapter extends PagedListAdapter<Team, TeamAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Team team = teamList.get(position);
-        holder.binding.setTeam(team);
-        holder.binding.getRoot().setOnClickListener(view -> listener.onTeamClick(team.getId()));
-        holder.binding.txtWebsite.setOnClickListener(view -> listener.onWebsiteClick());
+        Team team = getItem(position);
+        if (team != null){
+            holder.binding.setTeam(team);
+            holder.binding.getRoot().setOnClickListener(view -> listener.onTeamClick(team.getDbId()));
+            holder.binding.txtWebsite.setOnClickListener(view -> listener.onWebsiteClick());
+        }else{
+            Log.e(TAG, "onBindViewHolder: Item Null" );
+        }
+
     }
 
-    @Override
-    public int getItemCount() {
-        if(teamList == null) return 0;
-        else return teamList.size();
-    }
+
     public interface OnTeamClick{
         void onTeamClick(Integer teamId);
         void onWebsiteClick();

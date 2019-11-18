@@ -1,6 +1,5 @@
 package com.abdelrahman.footballleague.local;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -19,7 +18,7 @@ public interface TeamDao {
     void insertTeams(List<Team> teams);
 
     @Query("SELECT * FROM teams WHERE id >= :id LIMIT :size")
-    LiveData<List<Team>> getAllTeams(int id,int size);
+    List<Team> getAllTeams(int id,int size);
 
     @Query("DELETE FROM teams")
     void deleteAllTeams();

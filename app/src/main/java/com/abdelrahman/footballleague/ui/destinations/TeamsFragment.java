@@ -19,6 +19,8 @@ import com.abdelrahman.footballleague.R;
 import com.abdelrahman.footballleague.adapters.TeamAdapter;
 import com.abdelrahman.footballleague.databinding.PremierLeagueFragmentBinding;
 
+import java.util.Objects;
+
 /**
  * @author Abdel-Rahman El-Shikh on 15-Nov-19.
  */
@@ -35,6 +37,7 @@ public class TeamsFragment extends Fragment implements TeamAdapter.OnTeamClick {
         mViewModel = ViewModelProviders.of(this).get(TeamsViewModel.class);
         mViewModel.init();
         binding.recyclerViewTeams.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.recyclerViewTeams.setHasFixedSize(true);
         mAdapter = new TeamAdapter(this);
         binding.recyclerViewTeams.setAdapter(mAdapter);
         if(MyApplication.hasNetwork())
@@ -45,11 +48,18 @@ public class TeamsFragment extends Fragment implements TeamAdapter.OnTeamClick {
 
     private void getTeamsFromDb() {
         Log.i(TAG, "getTeams: From Local Database");
-        mViewModel.getTeamsLiveData().observe(getViewLifecycleOwner(), teams -> {
-                   // mAdapter.setTeams(teams);
-                    binding.progressBar.setVisibility(View.GONE);
-                }
-        );
+        mViewModel.teamsLiveData.observe(Objects.requireNonNull(getActivity()), teams -> {
+            mAdapter.submitList(teams);
+            mAdapter.notifyDataSetChanged();
+            binding.progressBar.setVisibility(View.GONE);
+        });
+//        mViewModel.getTeamsLiveData().observe(getViewLifecycleOwner(), teams -> {
+//            Toast.makeText(getActivity(), teams.size()+"", Toast.LENGTH_SHORT).show();
+//                    mAdapter.submitList(teams);
+//                    mAdapter.notifyDataSetChanged();
+//                    binding.progressBar.setVisibility(View.GONE);
+//                }
+//        );
     }
 
     private void getTeamsFromApi() {
@@ -68,11 +78,7 @@ public class TeamsFragment extends Fragment implements TeamAdapter.OnTeamClick {
                         Toast.makeText(getActivity(), "Server Error , Data from database", Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "getTeams: Failure" + response.getApiException().getLocalizedMessage());
                 }
-                binding.progressBar.setVisibility(View.GONE);
             });
-
-
-
 
 
     }

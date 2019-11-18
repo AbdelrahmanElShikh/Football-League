@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
@@ -25,21 +26,21 @@ import java.util.List;
 public class TeamsViewModel extends AndroidViewModel {
     private static final String TAG = "TeamsViewModel";
     private PremierLeagueRepository premierLeagueRepository;
-    private LiveData<List<Team>> teamsLiveData;
-
+    public final LiveData<PagedList<Team>> teamsLiveData;
+    private MutableLiveData<ApiResponse<PremierLeague>> premierLeague;
     private TeamDao teamDao;
     private TeamRoomDatabase teamRoomDatabase;
 
     public TeamsViewModel(@NonNull Application application) {
         super(application);
         TeamDataSourceFactory factory = new TeamDataSourceFactory(application);
-//        PagedList.Config config = (new PagedList.Config.Builder()).setEnablePlaceholders(true)
-//                .setInitialLoadSizeHint(6)
-//                .setPageSize(6).build();
-//        teamsLiveData = new LivePagedListBuilder<>(factory, config).build();
+        PagedList.Config config = (new PagedList.Config.Builder())
+                .setEnablePlaceholders(true)
+                .setInitialLoadSizeHint(6)
+                .setPageSize(6).build();
+        teamsLiveData = new LivePagedListBuilder<>(factory, config).build();
         teamRoomDatabase = TeamRoomDatabase.getDatabase(application);
         teamDao = teamRoomDatabase.teamDao();
-        teamsLiveData = teamDao.getAllTeams(0,6);
     }
 
     public void init() {
@@ -50,7 +51,7 @@ public class TeamsViewModel extends AndroidViewModel {
         insertAsync(teams);
     }
 
-    public LiveData<List<Team>> getTeamsLiveData() {
+    public LiveData<PagedList<Team>> getTeamsLiveData() {
         return teamsLiveData;
     }
 
@@ -82,7 +83,8 @@ public class TeamsViewModel extends AndroidViewModel {
     }
 
     public LiveData<ApiResponse<PremierLeague>> getPremierLeagueTeams() {
-        return premierLeagueRepository.getPremierLeagueTeams();
+        premierLeague = premierLeagueRepository.getPremierLeagueTeams();
+        return premierLeague;
     }
 
 

@@ -2,9 +2,9 @@ package com.abdelrahman.footballleague.local.dataSource;
 
 import android.content.Context;
 
-import com.abdelrahman.footballleague.models.Team;
-
 import androidx.paging.DataSource;
+
+import com.abdelrahman.footballleague.models.Team;
 
 /**
  * Football League
@@ -13,7 +13,7 @@ import androidx.paging.DataSource;
  */
 public class TeamDataSourceFactory extends DataSource.Factory<Integer, Team> {
     private Context ctx;
-    private TeamItemKeyDataSource teamDataSource;
+    private TeamDataSource teamDataSource;
 
     public TeamDataSourceFactory(Context ctx) {
         this.ctx = ctx;
@@ -22,7 +22,7 @@ public class TeamDataSourceFactory extends DataSource.Factory<Integer, Team> {
     @Override
     public DataSource<Integer, Team> create() {
         if(teamDataSource == null){
-            teamDataSource = new TeamItemKeyDataSource(ctx);
+            teamDataSource = new TeamDataSource(ctx);
         }
         return teamDataSource;
     }

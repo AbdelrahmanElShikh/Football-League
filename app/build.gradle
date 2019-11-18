@@ -43,6 +43,7 @@ dependencies {
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation "com.squareup.retrofit2:converter-gson:2.6.2"
+    implementation "com.squareup.retrofit2:retrofit-mock:2.3.0"
     //LifeCycle
     implementation "android.arch.lifecycle:extensions:1.1.1"
     implementation "android.arch.lifecycle:viewmodel:1.1.1"

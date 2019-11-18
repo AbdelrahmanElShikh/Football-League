@@ -1,6 +1,7 @@
 package com.abdelrahman.footballleague.repositories;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.abdelrahman.footballleague.api.ApiResponse;
 import com.abdelrahman.footballleague.api.ApiService;
@@ -28,7 +29,7 @@ public class PremierLeagueRepository {
         return premierLeagueRepository;
     }
 
-    public LiveData<ApiResponse<PremierLeague>> getPremierLeagueTeams(){
+    public MutableLiveData<ApiResponse<PremierLeague>> getPremierLeagueTeams(){
         RequestHandler<PremierLeague> requestHandler = new RequestHandler<PremierLeague>() {
             @Override
             public Call<PremierLeague> makeRequest() {

@@ -8,8 +8,7 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-import java.util.Objects;
+
 
 /**
  * @author Abdel-Rahman El-Shikh on 16-Nov-19.
@@ -20,7 +19,7 @@ public class Team {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     @NonNull
-    private Integer id;
+    private Integer dbId;
     @SerializedName("id")
     @Expose
     private Integer teamId;
@@ -71,19 +70,13 @@ public class Team {
 //    private List<Squad> squad = null;
 
 
-    public Team(@NonNull Integer id, String name, String website, String venue) {
-        this.id = id;
-        this.name = name;
-        this.website = website;
-        this.venue = venue;
+    @NonNull
+    public Integer getDbId() {
+        return dbId;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+    public void setDbId(@NonNull Integer dbId) {
+        this.dbId = dbId;
     }
 
     public String getName() {
@@ -189,6 +182,6 @@ public class Team {
         if (!(o instanceof Team)) return false;
         Team team = (Team) o;
         return teamId.equals(team.teamId) &&
-                id.equals(team.id);
+                dbId.equals(team.dbId);
     }
 }
