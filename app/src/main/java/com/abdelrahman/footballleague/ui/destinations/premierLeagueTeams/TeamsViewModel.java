@@ -1,4 +1,4 @@
-package com.abdelrahman.footballleague.ui.destinations;
+package com.abdelrahman.footballleague.ui.destinations.premierLeagueTeams;
 
 import android.app.Application;
 import android.util.Log;
@@ -26,7 +26,7 @@ import java.util.List;
 public class TeamsViewModel extends AndroidViewModel {
     private static final String TAG = "TeamsViewModel";
     private PremierLeagueRepository premierLeagueRepository;
-    private final LiveData<PagedList<Team>> teamsLiveData;
+    private  LiveData<PagedList<Team>> teamsLiveData;
     private TeamDao teamDao;
 
     public TeamsViewModel(@NonNull Application application) {
@@ -77,7 +77,6 @@ public class TeamsViewModel extends AndroidViewModel {
         new Thread(() -> {
             try {
                 teamDao.insertTeams(teams);
-                Log.e(TAG, "insertTeams: inserted");
             } catch (Exception e) {
                 Log.e(TAG, "Insert run: " + e.getLocalizedMessage());
             }

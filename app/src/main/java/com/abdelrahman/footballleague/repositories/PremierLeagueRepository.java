@@ -40,10 +40,10 @@ public class PremierLeagueRepository {
         return requestHandler.getApiResponseLiveData();
     }
 
-    public LiveData<ApiResponse<List<Team>>> getTeamById(String teamId){
-        RequestHandler<List<Team>> requestHandler = new RequestHandler<List<Team>>() {
+    public LiveData<ApiResponse<Team>> getTeamById(Integer teamId){
+        RequestHandler<Team> requestHandler = new RequestHandler<Team>() {
             @Override
-            public Call<List<Team>> makeRequest() {
+            public Call<Team> makeRequest() {
                 return apiService.getTeamById(teamId);
             }
         };

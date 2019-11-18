@@ -7,7 +7,21 @@
 
     <fragment
         android:id="@+id/teamsFragment"
-        android:name="com.abdelrahman.footballleague.ui.destinations.TeamsFragment"
+        android:name="com.abdelrahman.footballleague.ui.destinations.premierLeagueTeams.TeamsFragment"
         android:label="Premier League Teams"
-        tools:layout="@layout/premier_league_fragment" />
+        tools:layout="@layout/premier_league_fragment" >
+        <action
+            android:id="@+id/action_teamsFragment_to_teamDetailsFragment"
+            app:destination="@id/teamDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/teamDetailsFragment"
+        android:name="com.abdelrahman.footballleague.ui.destinations.teamDetails.TeamDetailsFragment"
+        android:label="TeamDetailsFragment"
+        tools:layout="@layout/team_details"
+        >
+        <argument
+            android:name="teamId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

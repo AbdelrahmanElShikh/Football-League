@@ -27,6 +27,7 @@ import java.util.List;
  * @author: Abdel-Rahman El-Shikh :) on 11/17/2019
  */
 public class TeamDataSource extends PageKeyedDataSource<Integer, Team> {
+    private static final String TAG = "TeamDataSource";
     private TeamDao dao;
     private static final int PAGE_SIZE = 6;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -44,7 +45,9 @@ public class TeamDataSource extends PageKeyedDataSource<Integer, Team> {
                 .subscribe(teamsObserved -> {
                     int nextKey = teamsObserved.get(teamsObserved.size() - 1).getTeamId();
                     callback.onResult(teamsObserved, null, nextKey);
-                });
+                },throwable ->
+                    Log.e(TAG, "loadAfter: "+throwable.getLocalizedMessage() )
+                );
         compositeDisposable.add(disposable);
     }
 
@@ -62,7 +65,9 @@ public class TeamDataSource extends PageKeyedDataSource<Integer, Team> {
                         int nextKey = teamsObserved.get(teamsObserved.size() - 1).getTeamId();
                         callback.onResult(teamsObserved, nextKey);
                     }
-                });
+                },throwable ->
+                    Log.e(TAG, "loadAfter: "+throwable.getLocalizedMessage() )
+                );
         compositeDisposable.add(disposable);
 
 

@@ -1,13 +1,16 @@
 package com.abdelrahman.footballleague.models;
 
+
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 
 import java.util.List;
 
@@ -170,8 +173,7 @@ public class Team {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Team)) return false;
-        else
-        {
+        else {
             Team team = (Team) o;
             return this.teamId.equals(team.teamId);
         }
@@ -183,4 +185,6 @@ public class Team {
                 "name='" + name + '\'' +
                 '}';
     }
+
+
 }

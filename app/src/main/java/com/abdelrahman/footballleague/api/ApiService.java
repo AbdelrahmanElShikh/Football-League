@@ -3,7 +3,7 @@ package com.abdelrahman.footballleague.api;
 import com.abdelrahman.footballleague.models.PremierLeague;
 import com.abdelrahman.footballleague.models.Team;
 
-import java.util.List;
+
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -21,6 +21,7 @@ public interface ApiService {
     Call<PremierLeague> getPremierLeagueTeams();
 
     //get specific team details by id.
+    @Headers("X-Auth-Token: " + "ae449e21e9524d928dadbdc85df4022c")
     @GET("teams/{id}")
-    Call<List<Team>> getTeamById(@Path("id") String teamId);
+    Call<Team> getTeamById(@Path("id") Integer teamId);
 }
