@@ -27,7 +27,6 @@ import java.util.List;
  * @author: Abdel-Rahman El-Shikh :) on 11/17/2019
  */
 public class TeamDataSource extends PageKeyedDataSource<Integer, Team> {
-    private static final String TAG = "TeamDataSource";
     private TeamDao dao;
     private static final int PAGE_SIZE = 6;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -55,7 +54,6 @@ public class TeamDataSource extends PageKeyedDataSource<Integer, Team> {
 
     @Override
     public void loadAfter(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, Team> callback) {
-        Log.e(TAG, "loadAfter: " + params.key);
         Flowable<List<Team>> teams = dao.getAllTeams(params.key + 1, PAGE_SIZE);
         Disposable disposable = teams.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

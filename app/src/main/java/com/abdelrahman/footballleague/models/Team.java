@@ -3,11 +3,13 @@ package com.abdelrahman.footballleague.models;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
 
 
 /**
@@ -26,16 +28,6 @@ public class Team {
     @SerializedName("shortName")
     @Expose
     private String shortName;
-
-    @NonNull
-    public Integer getTeamId() {
-        return teamId;
-    }
-
-    public void setTeamId(@NonNull Integer teamId) {
-        this.teamId = teamId;
-    }
-
     @SerializedName("tla")
     @Expose
     private String tla;
@@ -63,11 +55,10 @@ public class Team {
     @SerializedName("venue")
     @Expose
     private String venue;
-//    @SerializedName("squad")
-//    @Expose
-//    private List<Squad> squad = null;
-
-
+    @Ignore
+    @SerializedName("squad")
+    @Expose
+    private List<Squad> squad = null;
 
 
     public String getName() {
@@ -158,13 +149,22 @@ public class Team {
         this.venue = venue;
     }
 
-//    public List<Squad> getSquad() {
-//        return squad;
-//    }
-//
-//    public void setSquad(List<Squad> squad) {
-//        this.squad = squad;
-//    }
+    public List<Squad> getSquad() {
+        return squad;
+    }
+
+    public void setSquad(List<Squad> squad) {
+        this.squad = squad;
+    }
+
+    @NonNull
+    public Integer getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(@NonNull Integer teamId) {
+        this.teamId = teamId;
+    }
 
 
     @Override
