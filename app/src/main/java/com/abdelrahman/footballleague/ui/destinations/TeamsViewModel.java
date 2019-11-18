@@ -6,7 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
@@ -26,36 +26,38 @@ import java.util.List;
 public class TeamsViewModel extends AndroidViewModel {
     private static final String TAG = "TeamsViewModel";
     private PremierLeagueRepository premierLeagueRepository;
-    public final LiveData<PagedList<Team>> teamsLiveData;
-    private MutableLiveData<ApiResponse<PremierLeague>> premierLeague;
+    private final LiveData<PagedList<Team>> teamsLiveData;
     private TeamDao teamDao;
-    private TeamRoomDatabase teamRoomDatabase;
 
     public TeamsViewModel(@NonNull Application application) {
         super(application);
         TeamDataSourceFactory factory = new TeamDataSourceFactory(application);
+
         PagedList.Config config = (new PagedList.Config.Builder())
                 .setEnablePlaceholders(true)
                 .setInitialLoadSizeHint(6)
-                .setPageSize(6).build();
+                .setPageSize(6)
+                .build();
+
         teamsLiveData = new LivePagedListBuilder<>(factory, config).build();
-        teamRoomDatabase = TeamRoomDatabase.getDatabase(application);
+
+        TeamRoomDatabase teamRoomDatabase = TeamRoomDatabase.getDatabase(application);
         teamDao = teamRoomDatabase.teamDao();
     }
 
-    public void init() {
+    void init() {
         premierLeagueRepository = PremierLeagueRepository.getInstance();
     }
 
-    public void insertTeams(List<Team> teams) {
+    private void insertTeams(List<Team> teams) {
         insertAsync(teams);
     }
 
-    public LiveData<PagedList<Team>> getTeamsLiveData() {
+    LiveData<PagedList<Team>> getTeamsLiveData() {
         return teamsLiveData;
     }
 
-    public void deleteAndInsertNewTeams(List<Team> teams) {
+    void deleteAndInsertNewTeams(List<Team> teams) {
         deleteAndInsertNewTeamsAsync(teams);
     }
 
@@ -82,9 +84,8 @@ public class TeamsViewModel extends AndroidViewModel {
         }).start();
     }
 
-    public LiveData<ApiResponse<PremierLeague>> getPremierLeagueTeams() {
-        premierLeague = premierLeagueRepository.getPremierLeagueTeams();
-        return premierLeague;
+    LiveData<ApiResponse<PremierLeague>> getPremierLeagueTeams() {
+        return premierLeagueRepository.getPremierLeagueTeams();
     }
 
 

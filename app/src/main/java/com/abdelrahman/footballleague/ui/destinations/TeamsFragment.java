@@ -19,7 +19,7 @@ import com.abdelrahman.footballleague.R;
 import com.abdelrahman.footballleague.adapters.TeamAdapter;
 import com.abdelrahman.footballleague.databinding.PremierLeagueFragmentBinding;
 
-import java.util.Objects;
+
 
 /**
  * @author Abdel-Rahman El-Shikh on 15-Nov-19.
@@ -48,18 +48,12 @@ public class TeamsFragment extends Fragment implements TeamAdapter.OnTeamClick {
 
     private void getTeamsFromDb() {
         Log.i(TAG, "getTeams: From Local Database");
-        mViewModel.teamsLiveData.observe(Objects.requireNonNull(getActivity()), teams -> {
-            mAdapter.submitList(teams);
-            mAdapter.notifyDataSetChanged();
-            binding.progressBar.setVisibility(View.GONE);
-        });
-//        mViewModel.getTeamsLiveData().observe(getViewLifecycleOwner(), teams -> {
-//            Toast.makeText(getActivity(), teams.size()+"", Toast.LENGTH_SHORT).show();
-//                    mAdapter.submitList(teams);
-//                    mAdapter.notifyDataSetChanged();
-//                    binding.progressBar.setVisibility(View.GONE);
-//                }
-//        );
+        mViewModel.getTeamsLiveData().observe(getViewLifecycleOwner(), teams -> {
+                    mAdapter.submitList(teams);
+                    mAdapter.notifyDataSetChanged();
+                    binding.progressBar.setVisibility(View.GONE);
+                }
+        );
     }
 
     private void getTeamsFromApi() {

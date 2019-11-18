@@ -1,23 +1,18 @@
 package com.abdelrahman.footballleague.api;
 
-import android.util.Log;
 
-import com.abdelrahman.footballleague.MyApplication;
 import com.google.gson.Gson;
 
-import java.io.File;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
-import okhttp3.CacheControl;
-import okhttp3.Interceptor;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
+
 import okhttp3.ResponseBody;
-import okhttp3.logging.HttpLoggingInterceptor;
+
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -60,7 +55,7 @@ public class RetrofitBuilder {
         return retrofit.create(service);
     }
 
-    public static ApiError convertErrors(ResponseBody response) {
+    static ApiError convertErrors(ResponseBody response) {
         Converter<ResponseBody, ApiError> converter = retrofit.responseBodyConverter(ApiError.class, new Annotation[0]);
         ApiError apiError = null;
         try {

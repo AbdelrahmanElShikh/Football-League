@@ -15,13 +15,10 @@ import com.google.gson.annotations.SerializedName;
  */
 @Entity(tableName = "teams")
 public class Team {
-
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    @NonNull
-    private Integer dbId;
     @SerializedName("id")
     @Expose
+    @PrimaryKey
+    @NonNull
     private Integer teamId;
     @SerializedName("name")
     @Expose
@@ -30,11 +27,12 @@ public class Team {
     @Expose
     private String shortName;
 
+    @NonNull
     public Integer getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(Integer teamId) {
+    public void setTeamId(@NonNull Integer teamId) {
         this.teamId = teamId;
     }
 
@@ -70,14 +68,7 @@ public class Team {
 //    private List<Squad> squad = null;
 
 
-    @NonNull
-    public Integer getDbId() {
-        return dbId;
-    }
 
-    public void setDbId(@NonNull Integer dbId) {
-        this.dbId = dbId;
-    }
 
     public String getName() {
         return name;
@@ -178,10 +169,18 @@ public class Team {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (!(o instanceof Team)) return false;
-        Team team = (Team) o;
-        return teamId.equals(team.teamId) &&
-                dbId.equals(team.dbId);
+        else
+        {
+            Team team = (Team) o;
+            return this.teamId.equals(team.teamId);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

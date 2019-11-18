@@ -18,8 +18,8 @@ import retrofit2.Call;
  * @author Abdel-Rahman El-Shikh on 16-Nov-19.
  */
 public class PremierLeagueRepository {
-    private static final String TAG = "PremierLeagueRepository";
-    public static  PremierLeagueRepository premierLeagueRepository;
+
+    private static  PremierLeagueRepository premierLeagueRepository;
     private ApiService apiService = RetrofitBuilder.createService(ApiService.class);
 
 

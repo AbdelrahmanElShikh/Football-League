@@ -3,8 +3,17 @@ package com.abdelrahman.footballleague.local.dataSource;
 import android.content.Context;
 import android.util.Log;
 
+
 import androidx.annotation.NonNull;
+
 import androidx.paging.PageKeyedDataSource;
+import io.reactivex.Flowable;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+
+import io.reactivex.schedulers.Schedulers;
 
 import com.abdelrahman.footballleague.local.TeamDao;
 import com.abdelrahman.footballleague.local.TeamRoomDatabase;
@@ -20,59 +29,43 @@ import java.util.List;
 public class TeamDataSource extends PageKeyedDataSource<Integer, Team> {
     private static final String TAG = "TeamDataSource";
     private TeamDao dao;
-    private TeamRoomDatabase teamRoomDatabase;
+    private static final int PAGE_SIZE = 6;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    private static final int FIRST_PAGE = 1;
-    public static final int PAGE_SIZE = 6;
-
-    public TeamDataSource(Context ctx) {
-
-        teamRoomDatabase = TeamRoomDatabase.getDatabase(ctx);
+    TeamDataSource(Context ctx) {
+        TeamRoomDatabase teamRoomDatabase = TeamRoomDatabase.getDatabase(ctx);
         dao = teamRoomDatabase.teamDao();
     }
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Integer, Team> callback) {
-        List<Team> teams = dao.getAllTeams(0,params.requestedLoadSize);
-
- //       this is required to handle first request after db is created or app is installed
-        int noOfTries = 0;
-
-
-        while (teams.size() == 0){
-            teams = dao.getAllTeams(0,params.requestedLoadSize);
-            noOfTries++;
-            if(noOfTries == 6) break;
-            try {
-                Thread.sleep(500);
-            }catch (InterruptedException  e){}
-        }
-        Log.e(TAG, "loadInitial: "+teams.size() );
-        callback.onResult(teams,null,FIRST_PAGE+1);
+        Flowable<List<Team>> teams = dao.getAllTeams(0, params.requestedLoadSize);
+        Disposable disposable = teams.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(teamsObserved -> {
+                    int nextKey = teamsObserved.get(teamsObserved.size() - 1).getTeamId();
+                    callback.onResult(teamsObserved, null, nextKey);
+                });
+        compositeDisposable.add(disposable);
     }
 
     @Override
     public void loadBefore(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, Team> callback) {
-//        List<Team> teams = dao.getAllTeams(params.key,PAGE_SIZE);
-//        //if the current page is greater than one
-//        //we are decrementing the page number
-//        //else there is no previous page
-//        Integer adjacentKey = (params.key > 1) ? params.key - 1 : null;
-//        if(teams!=null)
-//        callback.onResult(teams, adjacentKey);
-        Log.e(TAG, "loadBefore: " );
-
     }
 
     @Override
     public void loadAfter(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, Team> callback) {
-        List<Team> teams = dao.getAllTeams(params.key,PAGE_SIZE);
-        if(teams!=null){
-            int nextKey = params.key+ teams.size();
-            //Log.e(TAG, "loadAfter: params.key =  "+params.key+" , nextKey " +nextKey);
-            callback.onResult(teams, nextKey);
-        }
-
+        Log.e(TAG, "loadAfter: " + params.key);
+        Flowable<List<Team>> teams = dao.getAllTeams(params.key + 1, PAGE_SIZE);
+        Disposable disposable = teams.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(teamsObserved -> {
+                    if (!teamsObserved.isEmpty()) {
+                        int nextKey = teamsObserved.get(teamsObserved.size() - 1).getTeamId();
+                        callback.onResult(teamsObserved, nextKey);
+                    }
+                });
+        compositeDisposable.add(disposable);
 
 
     }
