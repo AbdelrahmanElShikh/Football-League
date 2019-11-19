@@ -2,8 +2,10 @@ package com.abdelrahman.footballleague.ui.destinations.premierLeagueTeams;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +39,7 @@ public class TeamsFragment extends Fragment implements TeamAdapter.OnTeamClick {
     private TeamsViewModel mViewModel;
     private TeamAdapter mAdapter;
     private boolean isTeamsUpdated;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -51,47 +54,71 @@ public class TeamsFragment extends Fragment implements TeamAdapter.OnTeamClick {
         Objects.requireNonNull(((MainActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
         mViewModel = ViewModelProviders.of(this).get(TeamsViewModel.class);
         mViewModel.init();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         binding.recyclerViewTeams.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.recyclerViewTeams.setHasFixedSize(true);
         mAdapter = new TeamAdapter(this);
         binding.recyclerViewTeams.setAdapter(mAdapter);
-        if(MyApplication.hasNetwork() && !isTeamsUpdated)
-        getTeamsFromApi();
-        else getTeamsFromDb();
+        if (MyApplication.hasNetwork() && !isTeamsUpdated)
+            getTeamsFromApi();
+        else
+            getTeamsFromDb();
+        binding.btnRetry.setOnClickListener(view -> reConnect());
         return binding.getRoot();
+    }
+
+    private void reConnect() {
+        binding.progressBar.setVisibility(View.VISIBLE);
+        getTeamsFromApi();
     }
 
     private void getTeamsFromDb() {
         Log.i(TAG, "getTeams: From Local Database");
-        mViewModel.getTeamsLiveData().observe(getViewLifecycleOwner(), teams -> {
-                    Toast.makeText(getContext(), "From database", Toast.LENGTH_SHORT).show();
-                    mAdapter.submitList(teams);
-                    mAdapter.notifyDataSetChanged();
-                    binding.progressBar.setVisibility(View.GONE);
-                }
-        );
+        //so if the user (open the app for the first time and no data in room and no internet to store data)
+        // Or
+        // user cleared the app storage and opened the app with no internet
+        //we handle that
+        boolean isDbEmpty = sharedPreferences.getBoolean(getString(R.string.isDbEmpty), true);
+        if (!isDbEmpty)
+            mViewModel.getTeamsLiveData().observe(getViewLifecycleOwner(), teams -> {
+                        binding.txtNoTeams.setVisibility(View.GONE);
+                        binding.btnRetry.setVisibility(View.GONE);
+                        mAdapter.submitList(teams);
+                        mAdapter.notifyDataSetChanged();
+                        binding.progressBar.setVisibility(View.GONE);
+                    }
+            );
+        else {
+            binding.txtNoTeams.setVisibility(View.VISIBLE);
+            binding.progressBar.setVisibility(View.GONE);
+            binding.btnRetry.setVisibility(View.VISIBLE);
+
+        }
+
     }
 
     private void getTeamsFromApi() {
-            Log.i(TAG, "getTeams: Updated");
-            mViewModel.getPremierLeagueTeams().observe(getViewLifecycleOwner(), response -> {
-                switch (response.getStatus()) {
-                    case SUCCESS:
-                        mViewModel.deleteAndInsertNewTeams(response.getData().getTeams());
-                        isTeamsUpdated = true;
-                        getTeamsFromDb();
-                        break;
-                    case ERROR:
-                        Toast.makeText(getActivity(), response.getApiError().getMessage(), Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "getTeams: Error " + response.getApiError().getMessage());
-                        break;
-                    case Failure:
-                        Toast.makeText(getActivity(), "Server Error , Data from database", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "getTeams: Failure" + response.getApiException().getLocalizedMessage());
-                        getTeamsFromDb();
-                }
-                binding.progressBar.setVisibility(View.GONE);
-            });
+        Log.i(TAG, "getTeams: Updated");
+        mViewModel.getPremierLeagueTeams().observe(getViewLifecycleOwner(), response -> {
+            switch (response.getStatus()) {
+                case SUCCESS:
+                    mViewModel.deleteAndInsertNewTeams(response.getData().getTeams());
+                    sharedPreferences.edit()
+                            .putBoolean(getString(R.string.isDbEmpty), false)
+                            .apply();
+                    isTeamsUpdated = true;
+                    getTeamsFromDb();
+                    break;
+                case ERROR:
+                    Toast.makeText(getActivity(), response.getApiError().getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "getTeams: Error " + response.getApiError().getMessage());
+                    break;
+                case Failure:
+                    Log.e(TAG, "getTeams: Failure" + response.getApiException().getLocalizedMessage());
+                    getTeamsFromDb();
+            }
+            binding.progressBar.setVisibility(View.GONE);
+        });
 
 
     }
@@ -106,7 +133,8 @@ public class TeamsFragment extends Fragment implements TeamAdapter.OnTeamClick {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(teamWebsite));
         startActivity(browserIntent);
     }
-    private NavController controller(){
+
+    private NavController controller() {
         return NavHostFragment.findNavController(this);
     }
 }

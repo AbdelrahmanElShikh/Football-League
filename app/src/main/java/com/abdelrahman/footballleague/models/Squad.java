@@ -1,5 +1,7 @@
 package com.abdelrahman.footballleague.models;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,13 +11,14 @@ import com.google.gson.annotations.SerializedName;
 public class Squad {
     @SerializedName("id")
     @Expose
+    @NonNull
     private Integer id;
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("position")
     @Expose
-    private Object position;
+    private String position;
     @SerializedName("dateOfBirth")
     @Expose
     private String dateOfBirth;
@@ -27,22 +30,54 @@ public class Squad {
     private String nationality;
     @SerializedName("shirtNumber")
     @Expose
-    private Object shirtNumber;
+    private String shirtNumber;
     @SerializedName("role")
     @Expose
     private String role;
 
+    @NonNull
     public Integer getId() {
         return id;
     }
 
+    public void setId(@NonNull Integer id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public void setCountryOfBirth(String countryOfBirth) {
+        this.countryOfBirth = countryOfBirth;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public void setShirtNumber(String shirtNumber) {
+        this.shirtNumber = shirtNumber;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public String getName() {
         return name;
     }
 
 
-    public Object getPosition() {
+    public String getPosition() {
         return position;
     }
 
@@ -62,7 +97,7 @@ public class Squad {
     }
 
 
-    public Object getShirtNumber() {
+    public String getShirtNumber() {
         return shirtNumber;
     }
 

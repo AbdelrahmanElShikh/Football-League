@@ -2,4 +2,8 @@
     <string name="app_name">Football League</string>
     <!--Splash Screen-->
     <string name="cd_splash">Premier League Logo</string>
+    <string name="isDbEmpty">is_database_empty</string>
+    <string name="no_teams">No Teams Available .. please check internet connection</string>
+    <string name="retry">Retry</string>
+    <string name="back">back</string>
 </resources>

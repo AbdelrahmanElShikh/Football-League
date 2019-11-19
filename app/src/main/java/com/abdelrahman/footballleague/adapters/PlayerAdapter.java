@@ -1,18 +1,15 @@
 package com.abdelrahman.footballleague.adapters;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-
-import com.abdelrahman.footballleague.databinding.SquadItemBinding;
-import com.abdelrahman.footballleague.databinding.TeamDetailsBinding;
-import com.abdelrahman.footballleague.databinding.TeamItemBinding;
-import com.abdelrahman.footballleague.models.Squad;
-
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.abdelrahman.footballleague.databinding.SquadItemBinding;
+import com.abdelrahman.footballleague.models.Squad;
+
+import java.util.List;
 
 /**
  * Football League
@@ -21,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder> {
     private List<Squad> players;
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -37,16 +35,18 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return (players == null)? 0:players.size();
+        return (players == null) ? 0 : players.size();
     }
-    public void setPlayers(List<Squad> players){
+
+    public void setPlayers(List<Squad> players) {
         this.players = players;
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         SquadItemBinding binding;
-        public ViewHolder(@NonNull SquadItemBinding binding) {
+
+        ViewHolder(@NonNull SquadItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

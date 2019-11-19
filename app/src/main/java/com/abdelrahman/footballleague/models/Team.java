@@ -2,15 +2,12 @@ package com.abdelrahman.footballleague.models;
 
 
 import androidx.annotation.NonNull;
-
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 
 import java.util.List;
 
@@ -156,10 +153,6 @@ public class Team {
         return squad;
     }
 
-    public void setSquad(List<Squad> squad) {
-        this.squad = squad;
-    }
-
     @NonNull
     public Integer getTeamId() {
         return teamId;
@@ -179,6 +172,7 @@ public class Team {
         }
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Team{" +

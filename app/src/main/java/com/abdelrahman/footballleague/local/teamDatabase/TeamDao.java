@@ -1,16 +1,16 @@
 package com.abdelrahman.footballleague.local.teamDatabase;
 
 
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
-import androidx.room.Query;
+        import androidx.room.Dao;
+        import androidx.room.Insert;
+        import androidx.room.OnConflictStrategy;
+        import androidx.room.Query;
 
-import com.abdelrahman.footballleague.models.Team;
+        import com.abdelrahman.footballleague.models.Team;
 
-import java.util.List;
+        import java.util.List;
 
-import io.reactivex.Flowable;
+        import io.reactivex.Flowable;
 
 /**
  * @author Abdel-Rahman El-Shikh on 17-Nov-19.
