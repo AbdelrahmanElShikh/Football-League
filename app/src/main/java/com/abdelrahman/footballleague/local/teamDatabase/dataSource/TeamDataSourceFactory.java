@@ -1,4 +1,4 @@
-package com.abdelrahman.footballleague.local.dataSource;
+package com.abdelrahman.footballleague.local.teamDatabase.dataSource;
 
 import android.content.Context;
 

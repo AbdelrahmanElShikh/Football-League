@@ -1,25 +1,22 @@
-package com.abdelrahman.footballleague.local.dataSource;
+package com.abdelrahman.footballleague.local.teamDatabase.dataSource;
 
 import android.content.Context;
 import android.util.Log;
 
-
 import androidx.annotation.NonNull;
-
 import androidx.paging.PageKeyedDataSource;
-import io.reactivex.Flowable;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-
-import io.reactivex.schedulers.Schedulers;
-
-import com.abdelrahman.footballleague.local.TeamDao;
-import com.abdelrahman.footballleague.local.TeamRoomDatabase;
+import com.abdelrahman.footballleague.local.teamDatabase.TeamDao;
+import com.abdelrahman.footballleague.local.teamDatabase.TeamRoomDatabase;
 import com.abdelrahman.footballleague.models.Team;
 
 import java.util.List;
+
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Football League

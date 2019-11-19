@@ -11,9 +11,9 @@ import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
 import com.abdelrahman.footballleague.api.ApiResponse;
-import com.abdelrahman.footballleague.local.TeamDao;
-import com.abdelrahman.footballleague.local.TeamRoomDatabase;
-import com.abdelrahman.footballleague.local.dataSource.TeamDataSourceFactory;
+import com.abdelrahman.footballleague.local.teamDatabase.TeamDao;
+import com.abdelrahman.footballleague.local.teamDatabase.TeamRoomDatabase;
+import com.abdelrahman.footballleague.local.teamDatabase.dataSource.TeamDataSourceFactory;
 import com.abdelrahman.footballleague.models.PremierLeague;
 import com.abdelrahman.footballleague.models.Team;
 import com.abdelrahman.footballleague.repositories.PremierLeagueRepository;
