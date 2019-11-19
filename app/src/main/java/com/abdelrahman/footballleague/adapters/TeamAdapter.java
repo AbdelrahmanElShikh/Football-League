@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.abdelrahman.footballleague.databinding.TeamItemBinding;
 import com.abdelrahman.footballleague.models.Team;
 
+import java.util.Objects;
+
 
 /**
  * @author Abdel-Rahman El-Shikh on 15-Nov-19.
@@ -51,9 +53,6 @@ public class TeamAdapter extends PagedListAdapter<Team, TeamAdapter.ViewHolder> 
         Team team = getItem(position);
         if (team != null) {
             holder.binding.setTeam(team);
-            holder.binding.getRoot().setOnClickListener(view -> listener.onTeamClick(team.getTeamId()));
-            holder.binding.txtWebsite.setOnClickListener(view -> listener.onWebsiteClick(team.getWebsite()));
-
         } else {
             Log.e(TAG, "onBindViewHolder: Item Null");
         }
@@ -72,6 +71,8 @@ public class TeamAdapter extends PagedListAdapter<Team, TeamAdapter.ViewHolder> 
         ViewHolder(TeamItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            binding.getRoot().setOnClickListener(view -> listener.onTeamClick(Objects.requireNonNull(getItem(getAdapterPosition())).getTeamId()));
+            binding.txtWebsite.setOnClickListener(view -> listener.onWebsiteClick(Objects.requireNonNull(getItem(getAdapterPosition())).getWebsite()));
         }
     }
 
