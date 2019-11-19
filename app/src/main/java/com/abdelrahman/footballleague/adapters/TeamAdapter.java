@@ -3,18 +3,15 @@ package com.abdelrahman.footballleague.adapters;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.BindingAdapter;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.abdelrahman.footballleague.R;
 import com.abdelrahman.footballleague.databinding.TeamItemBinding;
 import com.abdelrahman.footballleague.models.Team;
-import com.squareup.picasso.Picasso;
+
 
 /**
  * @author Abdel-Rahman El-Shikh on 15-Nov-19.
@@ -55,8 +52,8 @@ public class TeamAdapter extends PagedListAdapter<Team, TeamAdapter.ViewHolder> 
         if (team != null) {
             holder.binding.setTeam(team);
             holder.binding.getRoot().setOnClickListener(view -> listener.onTeamClick(team.getTeamId()));
-            Picasso.get().load(team.getCrestUrl()).into(holder.binding.imgTeam);
             holder.binding.txtWebsite.setOnClickListener(view -> listener.onWebsiteClick(team.getWebsite()));
+
         } else {
             Log.e(TAG, "onBindViewHolder: Item Null");
         }
